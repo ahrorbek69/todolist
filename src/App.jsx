@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import FilterAddSearch from './components/FilterAddSearch'
 import PostForm from './components/PostForm'
 import TableList from './components/TableList'
-import MyInput from './UI/Input/MyInput'
-import MySelect from './UI/mySelect/MySelect'
 
 const App = () => {
 const [posts,setPosts]=useState([
@@ -24,51 +23,33 @@ const removePost = (post) => {
 setPosts(posts.filter(s => s.id !== post.id))
 }
 
-const [select, setSelect] = useState('')
-const [search, setSearch]= useState('')
+const [filter, setFilter] = useState({sort: '', query: ''})
 
-function getSortedPosts(){
-  if(select){
-    return [...posts].sort((a,b)=> a[select].localeCompare(b[select]))
+const SortedPosts = useMemo(()=>{
+  console.log('render');
+  if(filter.sort){
+    return [...posts].sort((a,b)=> a[filter.sort].localeCompare(b[filter.sort]))
   }
   return posts
-}
+},[filter.sort, posts])
+  
+const sortAndSearchPosts = useMemo(()=>{
+return  SortedPosts.filter(post => post.title.toLocaleLowerCase().includes(filter.query.toLocaleLowerCase()))
+},[filter.query,SortedPosts])
 
-const sortedPost = getSortedPosts()
+// const sortedPost = SortedPosts
 
-
-const sortPost = (sort) => {
-  setSelect(sort)
-  console.log(sort);
-
-}
 
   return (
     <div className=' w-460 shadow-md rounded-lg p-2'>
       <PostForm createPost={createPost}  posts={posts} setPost={setPost} setPosts={setPosts} post={post}/>
-      <div className=' flex  justify-between my-2'>
-        <MyInput 
-        placeholder='Search...'
-        value={search}
-        onChange={e => setSearch(e.target.value)}
-        className={'form-control mr-2'}
-        />
-       <MySelect 
-       value={select}
-       onChange={sortPost}
-        defaultValue={'Sorted By'}
-        options={[
-          {
-            value: 'title',name: 'Programming'
-          },
-          {
-            value: 'stack',name: 'Stack'
-          },
-        ]}
-       />
-      </div>
+      
+
+      <FilterAddSearch  filter={filter} setFilter={setFilter}/>
+
+
       {
-        posts.length ?  <TableList removePost={removePost} title={'Programming Language'} posts={sortedPost}/>
+        sortAndSearchPosts.length ?  <TableList removePost={removePost} title={'Programming Language'} posts={sortAndSearchPosts}/>
         :
         <h1 className=' text-center mt-2 text-2xl text-red-500 font-semibold'>You Should Add Some Post </h1>
       }
