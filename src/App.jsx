@@ -48,11 +48,8 @@ return  SortedPosts.filter(post => post.title.toLocaleLowerCase().includes(filte
       <FilterAddSearch  filter={filter} setFilter={setFilter}/>
 
 
-      {
-        sortAndSearchPosts.length ?  <TableList removePost={removePost} title={'Programming Language'} posts={sortAndSearchPosts}/>
-        :
-        <h1 className=' text-center mt-2 text-2xl text-red-500 font-semibold'>You Should Add Some Post </h1>
-      }
+      <TableList removePost={removePost} title={'Programming Language'} posts={sortAndSearchPosts}/>
+        
      
     </div>
   )

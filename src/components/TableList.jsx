@@ -3,6 +3,9 @@ import TableHeader from './TableHeader'
 import TableItem from './TableItem'
 
 const TableList = ({posts,title,removePost}) => {
+  if(!posts.length){
+    return <h1 className=' text-center mt-2 text-2xl text-red-500 font-semibold'>Not Faund </h1>
+  }
   return (
     <>
     <h2 className=' text-center font-semibold p-2 text-lg'>{title}</h2>
