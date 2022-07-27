@@ -12,6 +12,9 @@ const [posts,setPosts]=useState([
   {id:4,title: 'Ruby',stack: 'Cyber'},
 ])
 
+
+
+
 const [post, setPost] = useState({title: '', stack: ''})
 
 const createPost = (newPost) => {
@@ -24,13 +27,18 @@ setPosts(posts.filter(s => s.id !== post.id))
 const [select, setSelect] = useState('')
 const [search, setSearch]= useState('')
 
+function getSortedPosts(){
+  if(select){
+    return [...posts].sort((a,b)=> a[select].localeCompare(b[select]))
+  }
+  return posts
+}
 
-// const [title , setTitle] = useState('')
-// const [stack , setStack] = useState('')
+const sortedPost = getSortedPosts()
+
 
 const sortPost = (sort) => {
   setSelect(sort)
-  setPosts([...posts].sort((a,b)=> a[sort].localeCompare(b[sort])))
   console.log(sort);
 
 }
@@ -41,7 +49,9 @@ const sortPost = (sort) => {
       <div className=' flex  justify-between my-2'>
         <MyInput 
         placeholder='Search...'
-        
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        className={'form-control mr-2'}
         />
        <MySelect 
        value={select}
@@ -58,7 +68,7 @@ const sortPost = (sort) => {
        />
       </div>
       {
-        posts.length ?  <TableList removePost={removePost} title={'Programming Language'} posts={posts}/>
+        posts.length ?  <TableList removePost={removePost} title={'Programming Language'} posts={sortedPost}/>
         :
         <h1 className=' text-center mt-2 text-2xl text-red-500 font-semibold'>You Should Add Some Post </h1>
       }
