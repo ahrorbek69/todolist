@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PostForm from './components/PostForm'
 import TableList from './components/TableList'
+import MySelect from './UI/mySelect/MySelect'
 
 const App = () => {
 const [posts,setPosts]=useState([
@@ -19,18 +20,41 @@ const removePost = (post) => {
 setPosts(posts.filter(s => s.id !== post.id))
 }
 
+const [select, setSelect] = useState('')
+
 
 // const [title , setTitle] = useState('')
 // const [stack , setStack] = useState('')
 
+const sortPost = (sort) => {
+  setSelect(sort)
+  setPosts([...posts].sort((a,b)=> a[sort].localeCompare(b[sort])))
+  console.log(sort);
+
+}
 
   return (
     <div className=' w-460 shadow-md rounded-lg p-2'>
       <PostForm createPost={createPost}  posts={posts} setPost={setPost} setPosts={setPosts} post={post}/>
+      <div className=' flex flex-row-reverse my-2'>
+       <MySelect 
+       value={select}
+       onChange={sortPost}
+        defaultValue={'Sorted By'}
+        options={[
+          {
+            value: 'title',name: 'Programming'
+          },
+          {
+            value: 'stack',name: 'Stack'
+          },
+        ]}
+       />
+      </div>
       {
         posts.length ?  <TableList removePost={removePost} title={'Programming Language'} posts={posts}/>
         :
-        <h1 className=' text-center mt-2 text-2xl text-gray-500'>You Should Add Some Post </h1>
+        <h1 className=' text-center mt-2 text-2xl text-red-500 font-semibold'>You Should Add Some Post </h1>
       }
      
     </div>
