@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PostForm from './components/PostForm'
 import TableList from './components/TableList'
+import MyInput from './UI/Input/MyInput'
 import MySelect from './UI/mySelect/MySelect'
 
 const App = () => {
@@ -21,6 +22,7 @@ setPosts(posts.filter(s => s.id !== post.id))
 }
 
 const [select, setSelect] = useState('')
+const [search, setSearch]= useState('')
 
 
 // const [title , setTitle] = useState('')
@@ -36,7 +38,11 @@ const sortPost = (sort) => {
   return (
     <div className=' w-460 shadow-md rounded-lg p-2'>
       <PostForm createPost={createPost}  posts={posts} setPost={setPost} setPosts={setPosts} post={post}/>
-      <div className=' flex flex-row-reverse my-2'>
+      <div className=' flex  justify-between my-2'>
+        <MyInput 
+        placeholder='Search...'
+        
+        />
        <MySelect 
        value={select}
        onChange={sortPost}
