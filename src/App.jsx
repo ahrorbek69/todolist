@@ -1,56 +1,79 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import PostAPI from './API/PostAPI'
 import FilterAddSearch from './components/FilterAddSearch'
 import PostForm from './components/PostForm'
 import TableList from './components/TableList'
+import { usePosts } from './hooks/useCreatePost'
+import { useFetching } from './hooks/useFetching'
+import MyButton from './UI/button/MyButton'
+import MyModal from './UI/modal/MyModal'
 
 const App = () => {
-const [posts,setPosts]=useState([
-  {id:1,title: 'Pyton',stack: 'Full-stack'},
-  {id:2,title: 'Java',stack: 'Mobile-stack'},
-  {id:3,title: 'C#',stack: 'Full-stack'},
-  {id:4,title: 'Ruby',stack: 'Cyber'},
-])
+    const [posts, setPosts] = useState([])
+  const [post, setPost] = useState({ title: '', body: '' })
+  const [modal,setModal] = useState (false)
+  const [totalcount,setTotalCount] = useState(0)
+  const [filter, setFilter] = useState({ sort: '', query: '' })
+  const [fetchPosts,loading,postErr]= useFetching(async ()=>{
+    const response = await PostAPI()
+    setPosts(response.data)
+    // setTotalCount(response.headers[])
+  })
+
+  useEffect(() => {
+    fetchPosts()
+  },[])
+
+//  const fetchPosts = async () => {
+//   setLoading(true)
+//    const post = await PostAPI()
+//     setPosts(post)
+//     setLoading(false)
+//   }
 
 
 
 
-const [post, setPost] = useState({title: '', stack: ''})
 
-const createPost = (newPost) => {
-  setPosts([...posts,newPost])
-}
-const removePost = (post) => {
-setPosts(posts.filter(s => s.id !== post.id))
-}
-
-const [filter, setFilter] = useState({sort: '', query: ''})
-
-const SortedPosts = useMemo(()=>{
-  console.log('render');
-  if(filter.sort){
-    return [...posts].sort((a,b)=> a[filter.sort].localeCompare(b[filter.sort]))
+  const createPost = (newPost) => {
+    setPosts([...posts, newPost])
+    setModal(false)
   }
-  return posts
-},[filter.sort, posts])
-  
-const sortAndSearchPosts = useMemo(()=>{
-return  SortedPosts.filter(post => post.title.toLocaleLowerCase().includes(filter.query.toLocaleLowerCase()))
-},[filter.query,SortedPosts])
+  const removePost = (post) => {
+    setPosts(posts.filter(s => s.id !== post.id))
+  }
 
-// const sortedPost = SortedPosts
+  const sortedAndSearchPosts = usePosts(posts,filter.sort,filter.query)
+ 
+
+
+
+  // const sortedPost = SortedPosts
 
 
   return (
     <div className=' w-460 shadow-md rounded-lg p-2'>
-      <PostForm createPost={createPost}  posts={posts} setPost={setPost} setPosts={setPosts} post={post}/>
-      
+      <button className='btn btn-success' onClick={fetchPosts}>Add</button>
 
-      <FilterAddSearch  filter={filter} setFilter={setFilter}/>
+    <MyButton onClick={()=> setModal(true)} className='btn btn-primary w-auto'>Add Post</MyButton>
+    <MyModal visible={modal} setVisible={setModal}>
+       <PostForm createPost={createPost} posts={posts} setPost={setPost} setPosts={setPosts} post={post} />
+    </MyModal>
 
 
-      <TableList removePost={removePost} title={'Programming Language'} posts={sortAndSearchPosts}/>
-        
-     
+
+      <FilterAddSearch filter={filter} setFilter={setFilter} />
+{
+ postErr && <h1>Raxmat Error</h1>
+}
+{
+  loading 
+  ? <h1 className=' text-red-600 text-2xl text-center'>Loading...</h1>
+  : <TableList removePost={removePost} title={'Programming Language'} posts={sortedAndSearchPosts} />
+
+}
+
+
     </div>
   )
 }

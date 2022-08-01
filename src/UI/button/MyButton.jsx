@@ -2,9 +2,11 @@ import React from 'react'
 
 const MyButton = ({children , ...props}) => {
   return (
-    <button {...props} className='btn btn-primary w-100'>
+    <div className='w-full text-end'>
+      <button {...props} className='btn btn-primary'>
         {children}
     </button>
+    </div>
   )
 }
 

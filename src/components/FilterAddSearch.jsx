@@ -17,10 +17,10 @@ const FilterAddSearch = ({filter,setFilter}) => {
         defaultValue={'Sorted By'}
         options={[
           {
-            value: 'title',name: 'Programming'
+            value: 'title',name: 'Title'
           },
           {
-            value: 'stack',name: 'Stack'
+            value: 'body',name: 'Body'
           },
         ]}
        />

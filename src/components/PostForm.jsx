@@ -10,7 +10,7 @@ const PostForm = ({createPost,post,setPost,setPosts}) => {
           id: Date.now()  
         }
         createPost(newPost)
-        setPost({title: '', stack: ''})
+        setPost({title: '', body: ''})
       }
   return (
     <form >
@@ -26,11 +26,11 @@ const PostForm = ({createPost,post,setPost,setPosts}) => {
     <MyInput type="text"
      className='form-control my-2'
      placeholder='Enter Your Favourite Stack' 
-     value={post.stack}
-     onChange={(e)=> setPost({...post , stack: e.target.value})}
+     value={post.body}
+     onChange={(e)=> setPost({...post , body: e.target.value})}
      />
     
-    <MyButton onClick={addPost} >
+    <MyButton onClick={addPost}>
       Add Post
     </MyButton>
   </form>

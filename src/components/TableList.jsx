@@ -1,6 +1,7 @@
 import React from 'react'
-import TableHeader from './TableHeader'
+import { TransitionGroup, CSSTransition} from 'react-transition-group'
 import TableItem from './TableItem'
+import '../style/style.css'
 
 const TableList = ({posts,title,removePost}) => {
   if(!posts.length){
@@ -9,18 +10,43 @@ const TableList = ({posts,title,removePost}) => {
   return (
     <>
     <h2 className=' text-center font-semibold p-2 text-lg'>{title}</h2>
-      <table className="table table-striped">
+    <TransitionGroup>
+    {
+      posts.map((post,inx)=>(
+        <CSSTransition
+          key={post.id}
+          timeout={300}
+          classNames="item"
+          >
+        <TableItem removePost={removePost} id={inx += 1} post={post}/>
+        </CSSTransition>
+      ))
+    }
+    </TransitionGroup>
+
+
+
+
+      {/* <table className="table table-striped">
      <TableHeader />
      <tbody>
+      <TransitionGroup>
       {
         posts.map((post,inx) => (
-          <TableItem removePost={removePost} id={inx += 1} post={post}  key={post.id}/>
+          <CSSTransition
+          key={post.id}
+          timeout={200}
+          classNames="item"
+          >
+            <TableItem removePost={removePost} id={inx += 1} post={post}/>
+          </CSSTransition>
         ))
       }
+      </TransitionGroup>
      
      </tbody>
     
-  </table>
+  </table> */}
     </>
   )
 }

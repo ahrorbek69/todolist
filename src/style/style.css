@@ -1,0 +1,19 @@
+
+  
+  .item-enter {
+    transition: all 300ms ease-in;
+    transform: translateX(350px);
+    opacity: .3;
+  }
+  .item-enter-active {
+    transform: translateX(0);
+    transition: all 300ms ease-in;
+  }
+  .item-exit {
+    opacity: .3;
+  }
+  .item-exit-active {
+    transform: translateX(-350px);
+    transition: all 300ms ease-out;
+  }
+  
